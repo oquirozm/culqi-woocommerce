@@ -183,8 +183,14 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					 * Validando y formateando datos (one more time)							 *
 					 *
 					 */
-					 $dataUser = $order->get_user();
-					 $fono = $dataUser->billing_phone;
+                    if($order) {
+                        $dataUser = $order->get_user();
+                        $fono = $dataUser->get_billing_phone();
+                    }
+                    else {
+                        $dataUser = '';
+                        $fono = '';
+                    }
 					 $descripcion = '';
 					 $i = 1;
 					 $separador = ' - ';
@@ -346,8 +352,14 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                  */
                 $total = str_replace('.', '', number_format($order->get_total(), 2, '.', ''));
                 $total = str_replace(',', '',$total);
-                $dataUser = $order->get_user();
-                $fono = $dataUser->billing_phone;
+                if($order) {
+                    $dataUser = $order->get_user();
+                    $fono = $dataUser->get_billing_phone();
+                }
+                else {
+                    $dataUser = '';
+                    $fono = '';
+                }
                 $descripcion = '';
                 $i = 1;
                 $separador = ' - ';
@@ -369,35 +381,35 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                 $datos_nombre = "";
                 $datos_telefono = "";
                 $datos_direccion = "";
-                if ($order->billing_city == null) {
+                if ($order->get_billing_city() == null) {
                     $datos_ciudad = "Ciudad";
                 } else {
-                    $datos_ciudad = $order->billing_city;
+                    $datos_ciudad = $order->get_billing_city();
                 }
-                if ($order->billing_first_name == null){
+                if ($order->get_billing_first_name() == null){
                     $datos_nombre = "Nombre";
                 }else {
-                    $datos_nombre = $order->billing_first_name;
+                    $datos_nombre = $order->get_billing_first_name();
                 }
-                if ($order->billing_last_name == null){
+                if ($order->get_billing_last_name() == null){
                     $datos_apellido = "Apellido";
                 }else {
-                    $datos_apellido = $order->billing_last_name;
+                    $datos_apellido = $order->get_billing_last_name();
                 }
-                if ($order->billing_email == null){
+                if ($order->get_billing_email() == null){
                     $datos_correo = "integrate@culqi.com";
                 } else {
-                    $datos_correo = $order->billing_email;
+                    $datos_correo = $order->get_billing_email();
                 }
-                if ($order->billing_phone == null){
+                if ($order->get_billing_phone() == null){
                     $datos_telefono = "12313123";
                 } else {
-                    $datos_telefono = $order->billing_phone;
+                    $datos_telefono = $order->get_billing_phone();
                 }
-                if ($order->billing_address_1 == null) {
+                if ($order->get_billing_address_1() == null) {
                     $datos_direccion = "Avenida 123";
                 } else {
-                    $datos_direccion = $order->billing_address_1;
+                    $datos_direccion = $order->get_billing_address_1();
                 }
                 /*  End Crear Cargo  */
                 ?>
