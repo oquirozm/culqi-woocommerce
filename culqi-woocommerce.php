@@ -70,16 +70,16 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         } else {
             wc_add_notice('Por favor, ingresa un <strong>número telefónico </strong>válido. Solo numeros', 'error' );
         }
-        if(strlen ($_POST['billing_country'])>1 && strlen ($_POST['billing_country'])<3) {
-            //error_log("País correcto");
-        } else {
-            wc_add_notice('Por favor, ingresa un <strong>país </strong>válido.', 'error' );
-        }
-        if(strlen ($_POST['billing_city'])>2 && strlen ($_POST['billing_city'])<30) {
-            //error_log("Ciudad correcto");
-        } else {
-            wc_add_notice('Por favor, ingresa una <strong>ciudad </strong>válida.', 'error' );
-        }
+        // if(strlen ($_POST['billing_country'])>1 && strlen ($_POST['billing_country'])<3) {
+        //     //error_log("País correcto");
+        // } else {
+        //     wc_add_notice('Por favor, ingresa un <strong>país </strong>válido.', 'error' );
+        // }
+        // if(strlen ($_POST['billing_city'])>2 && strlen ($_POST['billing_city'])<30) {
+        //     //error_log("Ciudad correcto");
+        // } else {
+        //     wc_add_notice('Por favor, ingresa una <strong>ciudad </strong>válida.', 'error' );
+        // }
         if(strlen ($_POST['billing_address_1'])>5 && strlen ($_POST['billing_address_1'])<100) {
             //error_log("Dirección correcto");
         } else {
@@ -171,7 +171,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                 if (isset($_POST['token_id']) && isset($_POST['order_id'])) {
                     global $wpdb, $woocommerce;
 					$order = new WC_Order($_POST['order_id']);
-					$numeroPedido = str_pad($order->id, 2, "0", STR_PAD_LEFT);
+					$numeroPedido = str_pad($order->get_id(), 2, "0", STR_PAD_LEFT);
 					$total = str_replace('.', '', number_format($order->get_total(), 2, '.', ''));
 					$total = str_replace(',', '',$total);
                     $culqi = new Culqi\Culqi(array('api_key' => $this->culqi_key));
@@ -206,35 +206,35 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					 $datos_nombre = "";
 					 $datos_telefono = "";
 					 $datos_direccion = "";
-					 if ($order->billing_city == null) {
+					 if ($order->get_billing_city() == null) {
 							 $datos_ciudad = "Ciudad";
 					 } else {
-							 $datos_ciudad = $order->billing_city;
+							 $datos_ciudad = $order->get_billing_city();
 					 }
-					 if ($order->billing_first_name == null){
+					 if ($order->get_billing_first_name() == null){
 							 $datos_nombre = "Nombre";
 					 } else {
-							 $datos_nombre = $order->billing_first_name;
+							 $datos_nombre = $order->get_billing_first_name();
 					 }
-					 if ($order->billing_last_name == null){
+					 if ($order->get_billing_last_name() == null){
 							 $datos_apellido = "Apellido";
 					 } else {
-							 $datos_apellido = $order->billing_last_name;
+							 $datos_apellido = $order->get_billing_last_name();
 					 }
-					 if ($order->billing_email == null){
+					 if ($order->get_billing_email() == null){
 							 $datos_correo = "correo@tienda.com";
 					 } else {
-							 $datos_correo = $order->billing_email;
+							 $datos_correo = $order->get_billing_email();
 					 }
-					 if ($order->billing_phone == null){
+					 if ($order->get_billing_phone() == null){
 							 $datos_telefono = "12313123";
 					 } else {
-							 $datos_telefono = $order->billing_phone;
+							 $datos_telefono = $order->get_billing_phone();
 					 }
-					 if ($order->billing_address_1 == null) {
+					 if ($order->get_billing_address_1() == null) {
 							 $datos_direccion = "Avenida 123";
 					 } else {
-							 $datos_direccion = $order->billing_address_1;
+							 $datos_direccion = $order->get_billing_address_1();
 					 }
                     // Creando Cargo
                     try {
@@ -334,12 +334,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                 return array
                 (
                     'result' => 'success',
-                    'redirect' => add_query_arg('order', $order->id, add_query_arg('key', $order->order_key, get_permalink(woocommerce_get_page_id('pay'))))
+                    'redirect' => add_query_arg('order-pay', $order->get_id(), add_query_arg('key', $order->order_key, get_permalink(woocommerce_get_page_id('pay'))))
                 );
             }
             function receipt_page($order_id) {
                 $order = new WC_Order($order_id);
-                $numeroPedido = str_pad($order->id, 2, "0", STR_PAD_LEFT);
+                $numeroPedido = str_pad($order->get_id(), 2, "0", STR_PAD_LEFT);
                 /**
                  * Datos de la compra
                  *
