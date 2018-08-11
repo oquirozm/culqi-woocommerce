@@ -244,18 +244,19 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					 }
                     // Creando Cargo
                     try {
-											$charge = $culqi->Charges->create(array(
+                        $charge = $culqi->Charges->create(array(
                             "amount" => $total,
                             "antifraud_details" => array(
                                 "address" => $datos_direccion,
                                 "address_city" => $datos_ciudad,
-                                "country_code" => $order->billing_country,
+                                // "country_code" => $order->get_billing_country(),
+                                "country_code" => 'PE',
                                 "first_name" => $datos_nombre,
                                 "last_name" => $datos_apellido,
                                 "phone_number" => $datos_telefono,
                             ),
                             "capture" => true,
-                            "currency_code" => $order->order_currency,
+                            "currency_code" => $order->get_currency(),
                             "description" => $descripcion,
                             "email" => $datos_correo,
                             "installments" => (int)$_POST['installments'],
@@ -493,7 +494,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 	                                            type: "POST",
 	                                            data: {emptyCart: 1},
 	                                            success: function (data) {
-	                                                // console.log(data);
+	                                                console.log(data);
 	                                            }
 	                                        });
 		                                    } else {
@@ -502,7 +503,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 										}
 									}
                                 },
-                                error: function() {
+                                error: function(jqXHR, textStatus, errorThrown) {
                                     $('#culqi_notify').empty();
                                     $('#culqi_notify').html('Hubo algún problema en el procesamiento de la compra. Intenta nuevamente por favor.');
                                 }
